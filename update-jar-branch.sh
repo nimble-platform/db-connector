@@ -4,7 +4,7 @@ echo "Switching branch"
 git checkout jar-branch
 
 echo "Building the Jar"
-mvn clean compile assembly:single &> grep "BUILD SUCCESS"
+mvn clean compile assembly:single | grep "BUILD SUCCESS"
 [[ $? == 0 ]] || ( echo "Failed to build" && exit 1 )
 
 JAR_NAME="db-connector.jar"
