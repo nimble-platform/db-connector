@@ -50,6 +50,11 @@ public class DBManager {
         executeUpdateStatement(ps, false);
     }
 
+    public DatabaseMetaData getMetaData() throws SQLException {
+        logger.info("Getting metadata from the data base");
+        return connection.getMetaData();
+    }
+
     protected void executeUpdateStatement(PreparedStatement ps, boolean silent) throws SQLException {
         if (!silent) {
             logger.info("Executing update statement - " + ps);

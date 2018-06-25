@@ -9,12 +9,14 @@ import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by evgeniyh on 6/19/18.
  */
 
-public class ConnectionManager {
+class ConnectionManager {
     private static final Logger logger = LogManager.getLogger(ConnectionManager.class);
 
     private String user;
@@ -23,17 +25,29 @@ public class ConnectionManager {
 
     private Connection connection;
 
+    private static Map<String, String> driverToConnectionString = new HashMap<>();
+    static {
+        driverToConnectionString.put("org.postgresql.Driver" , "jdbc:postgresql://");
+    }
+
     public ConnectionManager(ManagerConfig config) throws SQLException, ClassNotFoundException {
         try {
 
             if (config == null || config.isMissingAnyValue()) {
                 throw new IllegalArgumentException("Credential values can't be null or empty");
             }
-            Class.forName(config.getDriver()); // Check that the driver is ok
+
+            String driverName = config.getDriver();
+            String connectionPrefix = driverToConnectionString.get(driverName);
+
+            if (connectionPrefix == null ) {
+                throw new UnsupportedOperationException("The connection manager doesn't support - " + driverName);
+            }
+            Class.forName(driverName); // Check that the driver is ok
 
             this.user = config.getUser();
             this.password = config.getPassword();
-            connectionUrl = "jdbc:postgresql://" + config.getUrl();
+            connectionUrl = connectionPrefix + config.getUrl();
             connection = DriverManager.getConnection(connectionUrl, user, password);
         } catch (Exception e) {
             logger.error("Error during the initialization of the DB Connection class", e);
