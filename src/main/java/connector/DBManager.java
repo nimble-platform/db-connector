@@ -14,7 +14,7 @@ import java.sql.SQLException;
 
 public class DBManager {
     private static final Logger logger = LogManager.getLogger(DBManager.class);
-    private final ConnectionManager connection;
+    protected final ConnectionManager connection;
 
     public DBManager(ManagerConfig config) throws SQLException, ClassNotFoundException {
          connection = new ConnectionManager(config);
