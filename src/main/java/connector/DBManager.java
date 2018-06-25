@@ -50,6 +50,10 @@ public class DBManager {
         executeUpdateStatement(ps, false);
     }
 
+    public PreparedStatement prepareStatement(String query) throws SQLException {
+        return connection.prepareStatement(query);
+    }
+
     public DatabaseMetaData getMetaData() throws SQLException {
         logger.info("Getting metadata from the data base");
         return connection.getMetaData();

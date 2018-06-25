@@ -66,6 +66,7 @@ class ConnectionManager {
 
     public PreparedStatement prepareStatement(String sqlQuery) throws SQLException {
         try {
+            logger.info("Preparing statement - " + sqlQuery);
             return connection.prepareStatement(sqlQuery);
         } catch (PSQLException e) {
             logger.error("Error during creation of prepared statement - trying to recreate connection again");
